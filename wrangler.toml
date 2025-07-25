@@ -1,0 +1,39 @@
+name = "cloudflare-docker-proxy-copy"
+compatibility_date = "2023-12-01"
+
+[dev]
+ip = "0.0.0.0"
+port = 8787
+local_protocol = "http"
+
+[env.vars]
+CUSTOM_DOMAIN = "flyclock.cn"
+YARN_ENABLE_IMMUTABLE_INSTALLS = false
+
+[env.dev.vars]
+MODE = "debug"
+TARGET_UPSTREAM = "https://registry-1.docker.io"
+
+[env.production]
+name = "cloudflare-docker-proxy"
+routes = [
+  { pattern = "docker.flyclock.cn", custom_domain = true },
+  { pattern = "quay.flyclock.cn", custom_domain = true },
+  { pattern = "gcr.flyclock.cn", custom_domain = true },
+  { pattern = "k8s-gcr.flyclock.cn", custom_domain = true },
+  { pattern = "k8s.flyclock.cn", custom_domain = true },
+  { pattern = "ghcr.flyclock.cn", custom_domain = true },
+  { pattern = "cloudsmith.flyclock.cn", custom_domain = true },
+]
+
+[env.production.vars]
+MODE = "production"
+TARGET_UPSTREAM = ""
+
+[env.staging]
+name = "cloudflare-docker-proxy-staging"
+route = { pattern = "docker-staging.flyclock.cn", custom_domain = true }
+
+[env.staging.vars]
+MODE = "staging"
+TARGET_UPSTREAM = ""
